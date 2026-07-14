@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,17 +21,16 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
   height: 100%;
-  background: #E5E8DE;
+  background: #D9DED3;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
-  /* iOS 全面屏顶部 / Android 状态栏适配 */
-  padding-top: env(safe-area-inset-top, 0);
 }
 .frame-wrap {
   position: fixed;
   top: env(safe-area-inset-top, 0);
   left: 0; right: 0;
   bottom: calc(64px + env(safe-area-inset-bottom, 0));
+  background: #E5E8DE;
 }
 iframe {
   position: absolute;
@@ -65,7 +64,7 @@ iframe.leaving {
 
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom, 0));
   background: rgba(247,248,243,0.95);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid rgba(197,205,184,0.55);
@@ -94,6 +93,32 @@ iframe.leaving {
 }
 .nav-item svg { width: 22px; height: 22px; }
 .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+
+/* 桌面端保留 App 的紧凑阅读宽度，避免内容横向拉散。 */
+@media (min-width: 721px) {
+  html, body {
+    background: radial-gradient(circle at 50% -20%, #F7F8F3 0, #E5E8DE 42%, #D9DED3 100%);
+  }
+  .frame-wrap {
+    width: min(100%, 720px);
+    left: 50%; right: auto;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(107,125,90,0.08), 0 22px 70px rgba(42,48,32,0.14);
+  }
+  .bottom-nav {
+    width: min(100%, 720px);
+    left: 50%; right: auto;
+    transform: translateX(-50%);
+    border-left: 1px solid rgba(197,205,184,0.55);
+    border-right: 1px solid rgba(197,205,184,0.55);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 30px rgba(42,48,32,0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 
 /* 启动占位 */
 .boot-loader {
@@ -209,7 +234,7 @@ const PAGES = {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="苔藓时光">
@@ -239,11 +264,11 @@ html, body {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
+body { overflow-y: auto; overflow-x: hidden; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
 /* ── HEADER ── */
 .header {
-  padding: 52px 24px 0;
+  padding: calc(32px + env(safe-area-inset-top, 0px)) 24px 0;
   margin-bottom: 28px;
 }
 .greeting {
@@ -286,7 +311,7 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   background: var(--bg-white);
   border-radius: 20px;
   padding: 20px 18px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 6px 18px rgba(42,48,32,0.05);
 }
 .flow-title {
   font-size: 11px;
@@ -313,18 +338,20 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   -webkit-tap-highlight-color: transparent;
 }
 .step-circle {
-  width: 44px; height: 44px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   background: var(--bg-card);
   display: flex; align-items: center; justify-content: center;
   font-size: 19px;
   border: 2px solid transparent;
-  transition: all 0.25s;
+  transition: all 0.28s cubic-bezier(0.34, 1.3, 0.5, 1);
   position: relative;
 }
+.flow-step:active .step-circle { transform: scale(0.92); }
 .flow-step.active .step-circle {
   background: var(--accent);
-  box-shadow: 0 4px 12px rgba(139,157,122,0.35);
+  box-shadow: 0 6px 16px rgba(139,157,122,0.40);
+  transform: scale(1.04);
 }
 .flow-step.done .step-circle {
   background: #E8EDE4;
@@ -352,12 +379,14 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   text-align: center;
 }
 .step-val {
-  font-size: 10px;
+  font-size: 11.5px;
   color: var(--accent);
   font-weight: 600;
   margin-top: -4px;
   text-align: center;
-  min-height: 13px;
+  min-height: 14px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
 }
 .flow-arrow {
   color: var(--ring-bg);
@@ -390,13 +419,13 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 6px 18px rgba(42,48,32,0.05);
   text-decoration: none;
   color: inherit;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: transform 0.18s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.18s;
   -webkit-tap-highlight-color: transparent;
 }
-.quick-card:active { transform: scale(0.98); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.quick-card:active { transform: scale(0.985); box-shadow: 0 1px 4px rgba(42,48,32,0.06); }
 .card-icon {
   width: 48px; height: 48px;
   border-radius: 14px;
@@ -435,7 +464,7 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 5px 14px rgba(42,48,32,0.04);
   border-left: 3px solid var(--ring-bg);
 }
 .next-task-card[data-priority="high"]   { border-left-color: #C9A9A1; }
@@ -466,12 +495,13 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   transition: background 0.2s ease, transform 0.15s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.2s ease;
   text-decoration: none;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(139,157,122,0.3);
+  box-shadow: 0 3px 10px rgba(139,157,122,0.35);
+  letter-spacing: 0.3px;
 }
 .btn-focus-now:active {
   background: var(--accent-dk);
-  transform: scale(0.93);
-  box-shadow: 0 1px 2px rgba(107,125,90,0.2);
+  transform: scale(0.94);
+  box-shadow: 0 1px 3px rgba(107,125,90,0.25);
 }
 .next-empty {
   text-align: center; padding: 24px 16px;
@@ -496,7 +526,7 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   border-radius: 16px;
   padding: 16px;
   text-align: center;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 5px 14px rgba(42,48,32,0.04);
 }
 .stat-num {
   font-size: 28px;
@@ -505,6 +535,8 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
   font-family: Georgia, serif;
   line-height: 1;
   margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
 }
 .stat-label {
   font-size: 11px;
@@ -516,7 +548,7 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   background: rgba(247,248,243,0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -543,6 +575,28 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: 160px; }
 .nav-item.active { color: var(--accent); }
 .nav-item svg { width: 22px; height: 22px; }
 .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(107,125,90,0.55);
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .header { padding-left: 20px; padding-right: 20px; }
+  .flow-wrap, .cards-wrap, .summary-wrap { padding-left: 16px; padding-right: 16px; }
+  .flow-card { padding: 18px 10px; }
+  .flow-arrow { font-size: 12px; margin: 0; }
+  .step-circle { width: 42px; height: 42px; font-size: 17px; }
+  .step-num { font-size: 10px; }
+  .step-val { font-size: 10px; letter-spacing: 0; }
+  .quick-card { padding: 16px; gap: 12px; }
+  .btn-focus-now { padding: 8px 10px; font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -736,7 +790,7 @@ loadData();
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="今日日程">
@@ -810,7 +864,7 @@ body { overflow-y: auto; overflow-x: hidden; }
   background: var(--bg-white);
   border-radius: 20px;
   padding: 16px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 6px 18px rgba(42,48,32,0.05);
 }
 .input-label {
   font-size: 12px;
@@ -819,6 +873,24 @@ body { overflow-y: auto; overflow-x: hidden; }
   margin-bottom: 10px;
   font-weight: 500;
 }
+.api-status {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(238,240,232,0.72);
+  color: var(--text-soft);
+  font: 12px/1.35 inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.api-status strong { color: var(--accent-dk); font-weight: 600; white-space: nowrap; }
+.api-status.ready { display: none; }
 .input-row {
   display: flex;
   gap: 10px;
@@ -826,6 +898,7 @@ body { overflow-y: auto; overflow-x: hidden; }
 }
 textarea#userInput {
   flex: 1;
+  min-width: 0;
   background: var(--bg-card);
   border: 1.5px solid transparent;
   border-radius: 14px;
@@ -858,6 +931,7 @@ textarea#userInput:focus { border-color: var(--accent); }
   display: flex; align-items: center; gap: 6px;
   transition: background 0.15s, transform 0.1s;
   white-space: nowrap;
+  min-height: 44px;
 }
 .btn-generate:active { background: var(--accent-dk); transform: scale(0.97); }
 .btn-generate:disabled { background: var(--ring-bg); cursor: not-allowed; transform: none; }
@@ -979,7 +1053,7 @@ textarea#userInput:focus { border-color: var(--accent); }
 
 /* ─── SCHEDULE CONTENT ─── */
 .schedule-wrap {
-  padding: 8px 20px 150px;
+  padding: 8px 20px calc(100px + env(safe-area-inset-bottom, 0px));
 }
 
 .empty-state {
@@ -990,6 +1064,16 @@ textarea#userInput:focus { border-color: var(--accent); }
 .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.6; }
 .empty-title { font-size: 16px; color: var(--text-soft); margin-bottom: 8px; }
 .empty-sub   { font-size: 13px; line-height: 1.6; }
+.empty-action {
+  margin-top: 18px;
+  padding: 11px 16px;
+  border: 1.5px solid var(--accent);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--accent-dk);
+  font: 500 13px inherit;
+  cursor: pointer;
+}
 
 /* ─── BLOCK (AM / PM) ─── */
 .block { margin-bottom: 24px; }
@@ -1000,23 +1084,27 @@ textarea#userInput:focus { border-color: var(--accent); }
   margin-bottom: 12px;
 }
 .block-pill {
-  padding: 4px 14px;
-  border-radius: 12px;
-  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
 }
 .block-am .block-pill { background: var(--am-hd); color: var(--text-mid); }
 .block-pm .block-pill { background: var(--pm-hd); color: var(--text-mid); }
 .block-time-range {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
 }
 .block-summary {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ─── TASK CARD ─── */
@@ -1025,13 +1113,14 @@ textarea#userInput:focus { border-color: var(--accent); }
   border-radius: 16px;
   padding: 14px 16px;
   margin-bottom: 10px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 4px 14px rgba(42,48,32,0.05);
   border-left: 3px solid transparent;
   position: relative;
-  transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
+  transition: transform 0.15s, box-shadow 0.2s, opacity 0.3s;
   cursor: grab;
   touch-action: manipulation;
 }
+.task-card:active { transform: scale(0.997); }
 .task-card.dragging-source {
   opacity: 0.25;
   transition: opacity 0.15s;
@@ -1052,19 +1141,26 @@ textarea#userInput:focus { border-color: var(--accent); }
 .task-card.drop-below::after {
   content: '';
   position: absolute;
-  left: 10px; right: 10px;
+  left: 12px; right: 12px;
   height: 3px;
   background: var(--accent);
-  border-radius: 2px;
-  box-shadow: 0 0 0 3px rgba(139,157,122,0.18);
+  border-radius: 3px;
+  box-shadow: 0 0 0 4px rgba(139,157,122,0.22), 0 0 12px rgba(139,157,122,0.35);
+  animation: dropPulse 1s ease-in-out infinite;
 }
-.task-card.drop-above::before { top: -7px; }
-.task-card.drop-below::after  { bottom: -7px; }
+@keyframes dropPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.65; }
+}
+.task-card.drop-above::before { top: -8px; }
+.task-card.drop-below::after  { bottom: -8px; }
 /* 拖到空块或块末尾时整个块高亮 */
 .task-list.drop-into {
-  background: rgba(139,157,122,0.08);
+  background: rgba(139,157,122,0.10);
+  outline: 1.5px dashed rgba(139,157,122,0.45);
+  outline-offset: -1px;
   border-radius: 14px;
-  transition: background 0.15s;
+  transition: background 0.15s, outline-color 0.15s;
 }
 .task-card.done {
   opacity: 0.55;
@@ -1103,7 +1199,9 @@ textarea#userInput:focus { border-color: var(--accent); }
   display: flex;
   align-items: flex-start;
   gap: 10px;
+  flex-wrap: wrap;
 }
+.task-body { flex: 1 1 200px; min-width: 0; }
 .task-check {
   flex-shrink: 0;
   width: 20px; height: 20px;
@@ -1160,7 +1258,6 @@ textarea#userInput:focus { border-color: var(--accent); }
   55%  { transform: rotate(45deg) translate(-1px, -1px) scale(1.25); opacity: 1; }
   100% { transform: rotate(45deg) translate(-1px, -1px) scale(1); opacity: 1; }
 }
-.task-body { flex: 1; min-width: 0; }
 .task-title {
   font-size: 15px;
   font-weight: 500;
@@ -1229,27 +1326,28 @@ textarea#userInput:focus { border-color: var(--accent); }
 /* ── FOCUS BUTTON on task card ── */
 .btn-task-focus {
   flex-shrink: 0;
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 6px 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px;
   background: var(--accent);
   color: #fff;
-  border: none; border-radius: 10px;
-  font-size: 12px; font-weight: 500;
+  border: none; border-radius: 11px;
+  font-size: 12.5px; font-weight: 500;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
   transition: background 0.2s ease, transform 0.15s cubic-bezier(0.34, 1.3, 0.5, 1), box-shadow 0.2s ease;
-  margin-left: 4px;
+  margin-left: auto;
   align-self: center;
-  box-shadow: 0 1px 3px rgba(139,157,122,0.25);
+  box-shadow: 0 2px 6px rgba(139,157,122,0.32);
+  letter-spacing: 0.3px;
 }
-.btn-task-focus:hover { box-shadow: 0 3px 10px rgba(139,157,122,0.35); }
+.btn-task-focus:hover { box-shadow: 0 4px 12px rgba(139,157,122,0.42); }
 .btn-task-focus:active {
   background: var(--accent-dk);
-  transform: scale(0.92);
-  box-shadow: 0 1px 2px rgba(107,125,90,0.2);
+  transform: scale(0.94);
+  box-shadow: 0 1px 3px rgba(107,125,90,0.25);
 }
 .task-card.done .btn-task-focus { display: none; }
 
@@ -1489,6 +1587,34 @@ body[data-no-anim] .task-card { animation: none !important; }
   color: var(--text-soft);
   line-height: 1.6;
 }
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(107,125,90,0.55);
+  outline-offset: 3px;
+}
+
+@media (max-width: 420px) {
+  .topbar { padding-left: 16px; padding-right: 16px; }
+  .input-area, .schedule-wrap { padding-left: 16px; padding-right: 16px; }
+  .input-row { flex-direction: column; align-items: stretch; }
+  textarea#userInput { width: 100%; }
+  .btn-generate { width: 100%; justify-content: center; min-height: 48px; }
+  .img-row { flex-wrap: wrap; }
+  .btn-upload-img, .img-preview-wrap { min-height: 42px; }
+  .img-preview-wrap { width: 100%; flex-basis: 100%; }
+  .task-top { gap: 8px; }
+  .task-body { flex-basis: calc(100% - 30px); }
+  .task-actions { margin-left: auto; }
+  .btn-task-focus { margin-left: 30px; }
+  .sheet { padding-left: 18px; padding-right: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -1511,6 +1637,9 @@ body[data-no-anim] .task-card { animation: none !important; }
 <div class="input-area">
   <div class="input-card">
     <div class="input-label">🌿 用一句话描述你今天要做的事，或上传日程图片</div>
+    <button class="api-status" id="apiStatus" type="button" onclick="openSettingsSheet()">
+      <span>首次使用需要配置 AI 服务</span><strong>去设置 →</strong>
+    </button>
     <div class="input-row">
       <textarea id="userInput" rows="2"
         placeholder="例如：上午开会和写报告，下午处理邮件，傍晚健身一小时"></textarea>
@@ -1732,10 +1861,12 @@ function saveCfg() { try { localStorage.setItem('schedule_cfg', JSON.stringify(s
 
 // ═══════════════ RENDER ═══════════════
 function render() {
-  // topbar date
+  // topbar date — 只显示日期部分（"今天/明天/昨天"标识已在 date-nav 里展示）
   const key = state.viewDate;
-  document.getElementById('topbarDate').textContent = formatDateLabel(key).split('  ')[1] || '';
-  document.getElementById('dateNavLabel').textContent = formatDateLabel(key);
+  const label = formatDateLabel(key);
+  const dateOnly = label.replace(/^(今天|明天|昨天)\\s+/, '');
+  document.getElementById('topbarDate').textContent = dateOnly;
+  document.getElementById('dateNavLabel').textContent = label;
 
   const wrap = document.getElementById('scheduleWrap');
   const tasks = (state.db[key] || []).slice();
@@ -1745,7 +1876,8 @@ function render() {
       <div class="empty-state">
         <div class="empty-icon">🌿</div>
         <div class="empty-title">今天还没有日程</div>
-        <div class="empty-sub">在上方输入一句话<br>让 AI 帮你规划一天的安排</div>
+        <div class="empty-sub">在上方输入一句话让 AI 帮你规划，<br>也可以从一件小事手动开始。</div>
+        <button class="empty-action" type="button" onclick="openAddTask('am')">+ 手动添加第一件事</button>
       </div>\`;
     return;
   }
@@ -2354,6 +2486,8 @@ function playCompleteLocal() {
 
 function deleteTask(id) {
   const tasks = state.db[state.viewDate] || [];
+  const task = tasks.find(t => t.id === id);
+  if (task && !window.confirm(\`删除「\${task.title}」吗？\`)) return;
   state.db[state.viewDate] = tasks.filter(t => t.id !== id);
   saveDB();
   render();
@@ -2445,6 +2579,9 @@ async function generate() {
   if (!state.cfg.key) {
     showToast('请先在设置里填入 API Key');
     openSettingsSheet();
+    return;
+  }
+  if ((state.db[state.viewDate] || []).length && !window.confirm('重新生成会替换当天现有任务，继续吗？')) {
     return;
   }
 
@@ -2570,8 +2707,15 @@ function saveSettings() {
   state.cfg.key   = document.getElementById('cfgKey').value.trim();
   state.cfg.model = document.getElementById('cfgModel').value.trim() || 'deepseek-v4-flash';
   saveCfg();
+  updateApiStatus();
   closeSettings();
   showToast('设置已保存');
+}
+
+function updateApiStatus() {
+  const status = document.getElementById('apiStatus');
+  if (!status) return;
+  status.classList.toggle('ready', !!state.cfg.key);
 }
 
 function setModel(name) {
@@ -2623,6 +2767,7 @@ ta.addEventListener('keydown', e => {
 // ═══════════════ INIT ═══════════════
 loadAll();
 state.viewDate = todayKey();
+updateApiStatus();
 render();
 <\/script>
 
@@ -2630,7 +2775,7 @@ render();
 <style>
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   background: rgba(247,248,243,0.92);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid rgba(197,205,184,0.55);
@@ -2658,7 +2803,7 @@ render();
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -2705,7 +2850,7 @@ html, body {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 24px 24px 80px;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) 24px calc(80px + env(safe-area-inset-bottom, 0px));
   position: relative;
   transition: background 0.8s ease;
 }
@@ -2717,30 +2862,33 @@ html, body {
 .mode-tabs {
   display: flex;
   gap: 6px;
-  background: rgba(197,205,184,0.35);
-  border-radius: 20px;
+  background: rgba(197,205,184,0.30);
+  border-radius: 22px;
   padding: 4px;
   margin-bottom: 56px;
   position: relative;
   z-index: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .mode-tab {
-  padding: 8px 20px;
-  border-radius: 16px;
+  padding: 8px 22px;
+  border-radius: 18px;
   border: none;
   background: transparent;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-soft);
   cursor: pointer;
-  transition: all 0.25s;
-  letter-spacing: 0.3px;
+  transition: all 0.28s cubic-bezier(0.34, 1.3, 0.5, 1);
+  letter-spacing: 0.5px;
   -webkit-tap-highlight-color: transparent;
 }
+.mode-tab:active { transform: scale(0.96); }
 .mode-tab.active {
   background: #fff;
   color: var(--text-mid);
-  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(42,48,32,0.08), 0 1px 2px rgba(42,48,32,0.04);
 }
 
 /* ======================== TIMER RING ======================== */
@@ -2760,7 +2908,7 @@ circle.track {
   fill: none;
   stroke: var(--ring-bg);
   stroke-width: 10;
-  opacity: 0.55;
+  opacity: 0.45;
   transition: stroke 0.8s;
 }
 circle.progress {
@@ -2769,7 +2917,7 @@ circle.progress {
   stroke-width: 10;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.8s linear, stroke 0.8s;
-  filter: drop-shadow(0 2px 6px rgba(139,157,122,0.35));
+  filter: drop-shadow(0 3px 8px rgba(139,157,122,0.45));
 }
 .app.break-mode circle.progress {
   stroke: var(--break-ring);
@@ -2796,11 +2944,12 @@ circle.progress {
   font-size: clamp(40px, 12vw, 62px);
   font-weight: 200;
   color: var(--text-main);
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   font-feature-settings: "tnum";
   line-height: 1;
   font-family: Georgia, 'Times New Roman', serif;
   transition: color 0.8s;
+  font-variant-numeric: tabular-nums;
 }
 .tap-hint {
   font-size: 11px;
@@ -2903,7 +3052,7 @@ circle.progress {
 /* ======================== SETTINGS PANEL ======================== */
 .settings-btn {
   position: fixed;
-  top: 20px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
   right: 20px;
   width: 40px;
   height: 40px;
@@ -2942,10 +3091,12 @@ circle.progress {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 28px 28px 0 0;
-  padding: 12px 28px 48px;
+  padding: 12px 28px calc(24px + env(safe-area-inset-bottom, 0px));
   z-index: 21;
   transform: translateY(100%);
   transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+  max-height: 82vh;
+  overflow-y: auto;
 }
 .settings-panel.open { transform: translateY(0); }
 
@@ -3035,7 +3186,7 @@ circle.progress {
 /* ======================== STATS MINI ======================== */
 .stats-bar {
   position: fixed;
-  top: 20px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
   left: 20px;
   display: flex;
   align-items: center;
@@ -3049,6 +3200,34 @@ circle.progress {
 }
 .stats-icon { font-size: 14px; }
 .stats-text { font-size: 13px; color: var(--text-mid); font-weight: 500; }
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(107,125,90,0.55);
+  outline-offset: 3px;
+}
+
+/* 紧凑高度（小屏横向、浏览器地址栏展开时）优先保证操作区不重叠。 */
+@media (max-height: 680px) {
+  .app { padding-top: 14px; padding-bottom: 62px; justify-content: flex-start; overflow-y: auto; }
+  .mode-tabs { margin-top: 50px; margin-bottom: 22px; }
+  .ring-area { width: min(58vw, 220px); height: min(58vw, 220px); }
+  .dots { margin-top: 20px; }
+  .controls { margin-top: 24px; }
+  .task-area { margin-top: 18px; }
+}
+@media (max-height: 540px) {
+  .mode-tabs { margin-top: 42px; margin-bottom: 14px; }
+  .ring-area { width: min(48vw, 176px); height: min(48vw, 176px); }
+  .time-display { font-size: 42px; }
+  .dots { margin-top: 12px; }
+  .controls { margin-top: 14px; gap: 16px; }
+  .task-area { margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -3186,6 +3365,7 @@ const state = {
   remaining: 0,      // seconds
   totalDuration: 0,  // seconds for current session
   intervalId: null,
+  endsAt: null,      // timestamp; keeps the timer accurate while a tab is backgrounded
   pomodorosInSet: 0, // 0–3, how many in current set of 4
   settings: { focus: 25, short: 5, long: 15 },
   todayKey: '',
@@ -3438,15 +3618,23 @@ function startTimer() {
   // unlock audio on first interaction
   try { getAudio().resume(); } catch(e) {}
   state.running = true;
+  state.endsAt = Date.now() + state.remaining * 1000;
   playStart();
   updatePlayPause();
-  state.intervalId = setInterval(tick, 1000);
+  state.intervalId = setInterval(tick, 250);
+  tick();
 }
 
 function pauseTimer() {
+  if (state.running && state.endsAt) {
+    state.remaining = Math.max(0, Math.ceil((state.endsAt - Date.now()) / 1000));
+  }
   state.running = false;
+  state.endsAt = null;
   clearInterval(state.intervalId);
   state.intervalId = null;
+  updateDisplay();
+  setPageTitle();
   updatePlayPause();
 }
 
@@ -3469,7 +3657,8 @@ function skipTimer() {
 }
 
 function tick() {
-  state.remaining -= 1;
+  if (!state.running || !state.endsAt) return;
+  state.remaining = Math.max(0, Math.ceil((state.endsAt - Date.now()) / 1000));
   setPageTitle();
   updateDisplay();
   if (state.remaining <= 0) {
@@ -3481,6 +3670,7 @@ function handleComplete(natural) {
   clearInterval(state.intervalId);
   state.intervalId = null;
   state.running = false;
+  state.endsAt = null;
   updatePlayPause();
 
   if (natural && state.currentMode === 'focus') {
@@ -3658,6 +3848,11 @@ function closeMarkDone() {
   const modal = document.getElementById('markDoneModal');
   if (modal) modal.style.display = 'none';
 }
+
+// 点空白（overlay 区域）关闭弹窗，不响应 sheet 内部的点击
+document.getElementById('markDoneModal').addEventListener('click', e => {
+  if (e.target.id === 'markDoneModal') closeMarkDone();
+});
 function showToastPomo(msg) {
   const t = document.getElementById('pomToast');
   if (!t) return;
@@ -3666,11 +3861,9 @@ function showToastPomo(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// visibility change — pause if hidden
+// 浏览器后台会节流 interval；回到前台时根据结束时间立刻校准。
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && state.running) {
-    // keep running in background (timer still ticks via setInterval)
-  }
+  if (!document.hidden && state.running) tick();
 });
 
 init();
@@ -3684,7 +3877,7 @@ init();
   background: rgba(238,240,232,0.96);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(197,205,184,0.55);
-  padding: 10px 20px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 20px 10px;
   align-items: center; gap: 10px;
   z-index: 80;
 }
@@ -3700,12 +3893,13 @@ init();
   background: rgba(42,48,32,0.3);
   z-index: 200;
   align-items: flex-end; justify-content: center;
+  cursor: pointer;
 }
 .mark-done-sheet {
   background: var(--panel-bg);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-radius: 28px 28px 0 0;
-  padding: 20px 28px 48px;
+  padding: 20px 28px calc(24px + env(safe-area-inset-bottom, 0px));
   width: 100%;
   text-align: center;
 }
@@ -3729,7 +3923,7 @@ init();
   font-size: 15px; cursor: pointer;
 }
 #pomToast {
-  position: fixed; bottom: 84px; left: 50%;
+  position: fixed; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); left: 50%;
   transform: translateX(-50%) translateY(10px);
   background: var(--text-main); color: #fff;
   padding: 10px 20px; border-radius: 20px;
@@ -3766,7 +3960,7 @@ init();
 <style>
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   background: rgba(247,248,243,0.92);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid rgba(197,205,184,0.55);
@@ -3796,7 +3990,7 @@ init();
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="打卡复盘">
@@ -3827,7 +4021,7 @@ body {
   color: var(--text-main);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  padding-bottom: 120px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
 }
 
 /* ── TOPBAR ── */
@@ -3856,7 +4050,7 @@ body {
   background: var(--bg-white);
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 6px 18px rgba(42,48,32,0.05);
 }
 .checkin-head {
   display: flex; justify-content: space-between; align-items: center;
@@ -3930,22 +4124,23 @@ textarea#noteInput:focus { border-color: var(--accent); }
   background: var(--bg-white);
   border-radius: 20px;
   padding: 18px 20px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(42,48,32,0.03), 0 6px 18px rgba(42,48,32,0.05);
   display: flex; align-items: center; gap: 16px;
 }
 .streak-big {
-  font-size: 40px; font-weight: 200;
+  font-size: 44px; font-weight: 200;
   color: var(--text-main);
   font-family: Georgia, serif;
   line-height: 1;
-  min-width: 44px; text-align: center;
+  min-width: 50px; text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 .streak-right { flex: 1; }
 .streak-title { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
 .streak-sub   { font-size: 12px; color: var(--text-soft); }
-.streak-dots  { display: flex; gap: 5px; margin-top: 10px; }
-.streak-dot   { width: 8px; height: 8px; border-radius: 50%; background: var(--ring-bg); }
-.streak-dot.filled { background: var(--accent); }
+.streak-dots  { display: flex; gap: 6px; margin-top: 10px; }
+.streak-dot   { width: 8px; height: 8px; border-radius: 50%; background: var(--ring-bg); transition: background 0.3s, transform 0.3s; }
+.streak-dot.filled { background: var(--accent); transform: scale(1.1); }
 
 /* ── 热力图 ── */
 .heatmap-card {
@@ -3965,15 +4160,17 @@ textarea#noteInput:focus { border-color: var(--accent); }
 .heatmap-grid {
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(7, 11px);
-  gap: 3px;
+  grid-template-rows: repeat(7, 13px);
+  gap: 4px;
 }
 .heatmap-cell {
-  width: 11px; height: 11px;
-  border-radius: 2px;
+  width: 13px; height: 13px;
+  border-radius: 3px;
   background: var(--bg-card);
   cursor: pointer;
+  transition: transform 0.15s ease;
 }
+.heatmap-cell:active { transform: scale(1.18); }
 .heatmap-cell[data-level="1"] { background: #C5CDB8; }
 .heatmap-cell[data-level="2"] { background: #A8B0A0; }
 .heatmap-cell[data-level="3"] { background: #8B9D7A; }
@@ -3984,7 +4181,7 @@ textarea#noteInput:focus { border-color: var(--accent); }
   margin-top: 12px; justify-content: flex-end;
 }
 .legend-label { font-size: 10px; color: var(--text-mute); }
-.legend-cell { width: 10px; height: 10px; border-radius: 2px; }
+.legend-cell { width: 11px; height: 11px; border-radius: 3px; }
 
 /* ── 近 30 天柱状图 —— 重做版 ── */
 .bar-card {
@@ -4081,7 +4278,7 @@ textarea#noteInput:focus { border-color: var(--accent); }
 /* ── 底部导航 ── */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   background: rgba(247,248,243,0.92);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
@@ -4102,7 +4299,7 @@ textarea#noteInput:focus { border-color: var(--accent); }
 
 /* toast */
 .toast {
-  position: fixed; bottom: 84px; left: 50%;
+  position: fixed; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); left: 50%;
   transform: translateX(-50%) translateY(10px);
   background: var(--text-main); color: #fff;
   padding: 10px 20px; border-radius: 20px;
@@ -4113,6 +4310,30 @@ textarea#noteInput:focus { border-color: var(--accent); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+button:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+.heatmap-cell:focus-visible,
+.bar-col:focus-visible {
+  outline: 3px solid rgba(107,125,90,0.55);
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .topbar { padding-left: 16px; padding-right: 16px; }
+  .section { padding-left: 16px; padding-right: 16px; }
+  .checkin-card { padding: 16px; }
+  .checkin-head { align-items: flex-start; gap: 8px; }
+  .checkin-h-date { text-align: right; line-height: 1.35; }
+  .streak-card { padding: 16px; gap: 12px; }
+  .streak-big { font-size: 38px; min-width: 42px; }
+  .sheet { padding-left: 18px; padding-right: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -4222,7 +4443,7 @@ textarea#noteInput:focus { border-color: var(--accent); }
 <!-- 底部导航 -->
 
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 // ─── 工具 ───
@@ -4411,7 +4632,13 @@ function renderHeatmap() {
     if (key === TODAY) cell.classList.add('today');
     cell.dataset.key = key;
     cell.title = key;
+    cell.tabIndex = 0;
+    cell.setAttribute('role', 'button');
+    cell.setAttribute('aria-label', \`\${formatDateLabel(key)}，活跃度 \${counts[key] || 0}\`);
     cell.addEventListener('click', () => openDetail(key));
+    cell.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(key); }
+    });
     grid.appendChild(cell);
     d.setDate(d.getDate() + 1);
   }
@@ -4448,6 +4675,9 @@ function renderBar() {
     col.className = 'bar-col';
     col.dataset.key = day.key;
     col.dataset.done = day.done;
+    col.tabIndex = 0;
+    col.setAttribute('role', 'button');
+    col.setAttribute('aria-label', \`\${formatDateLabel(day.key)}，完成 \${day.done} 个任务\`);
 
     const fill = document.createElement('div');
     fill.className = 'bar-fill' + (day.isToday ? ' today' : '') + (day.done === 0 ? ' empty' : '');
@@ -4473,6 +4703,9 @@ function renderBar() {
     col.addEventListener('click', e => {
       showTip(e);
       openDetail(day.key);
+    });
+    col.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showTip(e); openDetail(day.key); }
     });
     row.appendChild(col);
   });
