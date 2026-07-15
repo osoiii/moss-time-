@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="苔藓时光">
-<meta name="theme-color" content="#E5E8DE">
+<meta name="theme-color" content="#090D10">
 <meta name="format-detection" content="telephone=no">
 <title>苔藓时光 · 时间管理</title>
 
@@ -17,11 +17,15 @@
 
 <title>苔藓时光 · 时间管理</title>
 <style>
-:root { color-scheme: light; }
+:root { color-scheme: dark; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
   height: 100%;
-  background: #D9DED3;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(151, 157, 108, 0.16), transparent 32%),
+    linear-gradient(135deg, rgba(7, 10, 12, 0.76), rgba(8, 12, 15, 0.96)),
+    url("assets/moss-night-bg.jpg") center / cover fixed,
+    #090D10;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
 }
@@ -30,7 +34,7 @@ html, body {
   top: env(safe-area-inset-top, 0);
   left: 0; right: 0;
   bottom: calc(64px + env(safe-area-inset-bottom, 0));
-  background: #E5E8DE;
+  background: #090D10;
 }
 iframe {
   position: absolute;
@@ -38,7 +42,7 @@ iframe {
   width: 100%;
   height: 100%;
   border: 0;
-  background: #E5E8DE;
+  background: #090D10;
   opacity: 0;
   visibility: hidden;
   transform: translateX(16px);
@@ -65,9 +69,9 @@ iframe.leaving {
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
   height: calc(64px + env(safe-area-inset-bottom, 0));
-  background: rgba(247,248,243,0.95);
+  background: rgba(16, 20, 21, 0.88);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(197,205,184,0.55);
+  border-top: 1px solid rgba(229, 227, 213, 0.14);
   display: flex; align-items: center; justify-content: space-around;
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom, 0);
@@ -76,7 +80,7 @@ iframe.leaving {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 3px;
-  color: #A8B09A; padding: 8px 0;
+  color: #6F7672; padding: 8px 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   background: transparent; border: none;
@@ -84,7 +88,12 @@ iframe.leaving {
   transition: color 0.2s, transform 0.15s;
 }
 .nav-item:active { transform: scale(0.92); }
-.nav-item.active { color: #8B9D7A; }
+.nav-item:focus-visible {
+  outline: 1px solid rgba(194, 204, 136, 0.62);
+  outline-offset: -4px;
+  border-radius: 14px;
+}
+.nav-item.active { color: #B2BB79; }
 .nav-item.active svg { animation: navPop 0.4s cubic-bezier(0.34, 1.4, 0.5, 1); }
 @keyframes navPop {
   0%   { transform: scale(0.85); }
@@ -94,26 +103,64 @@ iframe.leaving {
 .nav-item svg { width: 22px; height: 22px; }
 .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
 
-/* 桌面端保留 App 的紧凑阅读宽度，避免内容横向拉散。 */
-@media (min-width: 721px) {
-  html, body {
-    background: radial-gradient(circle at 50% -20%, #F7F8F3 0, #E5E8DE 42%, #D9DED3 100%);
-  }
+/* 桌面端改为悬浮侧边导航，内容获得真正的仪表盘宽度。 */
+@media (min-width: 900px) {
   .frame-wrap {
-    width: min(100%, 720px);
-    left: 50%; right: auto;
-    transform: translateX(-50%);
-    box-shadow: 0 0 0 1px rgba(107,125,90,0.08), 0 22px 70px rgba(42,48,32,0.14);
+    top: 24px;
+    bottom: 24px;
+    left: max(122px, calc(50% - 502px));
+    right: auto;
+    width: min(calc(100vw - 146px), 1102px);
+    border: 1px solid rgba(229, 227, 213, 0.12);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.46);
   }
   .bottom-nav {
-    width: min(100%, 720px);
-    left: 50%; right: auto;
-    transform: translateX(-50%);
-    border-left: 1px solid rgba(197,205,184,0.55);
-    border-right: 1px solid rgba(197,205,184,0.55);
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -8px 30px rgba(42,48,32,0.08);
+    top: 24px;
+    bottom: 24px;
+    left: max(24px, calc(50% - 600px));
+    right: auto;
+    width: 82px;
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 70px 10px 18px;
+    border: 1px solid rgba(229, 227, 213, 0.13);
+    border-radius: 26px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
   }
+  .bottom-nav::before {
+    content: "苔";
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transform: translateX(-50%);
+    color: #D9DCB9;
+    font: 600 15px/1 "Songti SC", "STSong", serif;
+    background: radial-gradient(circle at 34% 28%, #B6BF80, #5F6841 58%, #22281D 100%);
+    box-shadow: 0 0 0 1px rgba(226, 226, 201, 0.22), 0 8px 24px rgba(129, 143, 81, 0.28);
+  }
+  .nav-item {
+    flex: none;
+    width: 100%;
+    min-height: 68px;
+    border-radius: 17px;
+  }
+  .nav-item:hover { color: #A5AD8A; background: rgba(255,255,255,0.035); }
+  .nav-item.active {
+    color: #C5CE8A;
+    background: rgba(154, 165, 106, 0.13);
+    box-shadow: inset 0 0 0 1px rgba(185, 194, 128, 0.1);
+  }
+  .nav-item svg { width: 23px; height: 23px; }
+  .nav-label { font-size: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -124,12 +171,21 @@ iframe.leaving {
 .boot-loader {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  background: #E5E8DE;
+  background: #090D10;
   z-index: 1000;
   transition: opacity 0.3s, visibility 0s 0.3s;
 }
 .boot-loader.hide { opacity: 0; visibility: hidden; }
-.boot-loader .leaf { font-size: 36px; animation: float 2s ease-in-out infinite; }
+.boot-loader .leaf {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  color: #D9DCB9;
+  font: 600 17px/1 "Songti SC", "STSong", serif;
+  background: radial-gradient(circle at 34% 28%, #B6BF80, #5F6841 58%, #22281D 100%);
+  box-shadow: 0 0 0 1px rgba(226,226,201,.2), 0 0 38px rgba(141,154,91,.2);
+  animation: float 2s ease-in-out infinite;
+}
 @keyframes float {
   0%,100% { transform: translateY(0); }
   50%     { transform: translateY(-6px); }
@@ -140,11 +196,12 @@ iframe.leaving {
   position: fixed;
   left: 12px; right: 12px;
   bottom: -500px;            /* 足够深，确保完全藏在屏幕外 */
-  background: rgba(247, 248, 243, 0.97);
+  background: rgba(18, 22, 23, 0.96);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-radius: 16px;
   padding: 14px 16px;
-  box-shadow: 0 8px 30px rgba(42, 48, 32, 0.18);
+  border: 1px solid rgba(229, 227, 213, 0.13);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.34);
   display: flex; align-items: center; gap: 12px;
   z-index: 200;
   pointer-events: none;
@@ -157,17 +214,26 @@ iframe.leaving {
   opacity: 1;
   pointer-events: auto;
 }
-.install-tip-icon { font-size: 24px; flex-shrink: 0; }
+.install-tip-icon {
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #DDE2BA;
+  font: 600 12px/1 "Songti SC", "STSong", serif;
+  background: radial-gradient(circle at 34% 28%, #AEB878, #515B39 72%);
+  box-shadow: 0 0 14px rgba(154,165,106,.2);
+}
 .install-tip-body { flex: 1; }
-.install-tip-title { font-size: 13px; font-weight: 500; color: #2A3020; margin-bottom: 2px; }
-.install-tip-desc { font-size: 11.5px; color: #7A8A68; line-height: 1.4; }
+.install-tip-title { font-size: 13px; font-weight: 500; color: #E7E6DC; margin-bottom: 2px; }
+.install-tip-desc { font-size: 11.5px; color: #9B9F96; line-height: 1.4; }
 .install-tip-close {
   flex-shrink: 0;
   width: 26px; height: 26px;
   border-radius: 50%;
   border: none;
-  background: rgba(168, 176, 154, 0.15);
-  color: #7A8A68;
+  background: rgba(168, 176, 154, 0.12);
+  color: #AFB5AA;
   font-size: 16px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
@@ -177,11 +243,11 @@ iframe.leaving {
 </head>
 <body>
 
-<div class="boot-loader" id="bootLoader"><span class="leaf">🌿</span></div>
+<div class="boot-loader" id="bootLoader"><span class="leaf">苔</span></div>
 
 <!-- 添加到主屏 提示横幅（仅在浏览器模式下出现） -->
 <div class="install-tip" id="installTip">
-  <div class="install-tip-icon">🌿</div>
+  <div class="install-tip-icon" aria-hidden="true">苔</div>
   <div class="install-tip-body">
     <div class="install-tip-title">把"苔藓时光"装进主屏</div>
     <div class="install-tip-desc" id="installTipDesc">用得更顺手</div>
@@ -238,7 +304,7 @@ const PAGES = {
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="苔藓时光">
-<meta name="theme-color" content="#E5E8DE">
+<meta name="theme-color" content="#090D10">
 <title>苔藓时光</title>
 <style>
 :root {
@@ -597,6 +663,203 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ── MOSS NIGHT · 第一轮视觉系统 ── */
+:root {
+  --bg: #090D10;
+  --bg-card: rgba(28, 31, 29, 0.82);
+  --bg-white: rgba(29, 31, 29, 0.72);
+  --ring-bg: rgba(204, 202, 187, 0.22);
+  --accent: #9AA56A;
+  --accent-dk: #717B4F;
+  --text-main: #E3E0D6;
+  --text-mid: #C4C1B7;
+  --text-soft: #92958A;
+  --text-mute: #666B66;
+  --border: rgba(218, 216, 201, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.055);
+  color-scheme: dark;
+}
+html { background: #090D10; }
+body {
+  background-color: #090D10;
+  background-image:
+    linear-gradient(180deg, rgba(7, 10, 12, 0.32), rgba(7, 10, 12, 0.70)),
+    radial-gradient(circle at 67% 12%, rgba(154, 165, 106, 0.08), transparent 35%),
+    url("assets/moss-night-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(4,7,8,0.18), transparent 42%, rgba(4,7,8,0.18)),
+    radial-gradient(circle at 50% 35%, transparent 20%, rgba(4,7,8,0.32) 100%);
+  z-index: 0;
+}
+body > * { position: relative; z-index: 1; }
+
+.header {
+  padding-top: calc(38px + env(safe-area-inset-top, 0px));
+  margin-bottom: 30px;
+}
+.greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-soft);
+  font-size: 12px;
+  letter-spacing: 1.8px;
+}
+.greeting::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px rgba(154,165,106,0.72);
+}
+.header-title {
+  margin-top: 10px;
+  max-width: 520px;
+  color: var(--text-main);
+  font-size: clamp(30px, 7.5vw, 46px);
+  font-weight: 450;
+  line-height: 1.08;
+  letter-spacing: -1.4px;
+  text-shadow: 0 10px 34px rgba(0,0,0,0.48);
+}
+.header-sub { margin-top: 10px; color: var(--text-soft); letter-spacing: 0.4px; }
+.streak-badge {
+  padding: 8px 13px;
+  gap: 8px;
+  color: var(--text-mid);
+  background: linear-gradient(135deg, rgba(45,46,41,0.76), rgba(19,22,21,0.82));
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 12px 28px rgba(0,0,0,0.24);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.streak-orb {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(154,165,106,0.8);
+}
+
+.flow-card,
+.summary-stat,
+.next-task-card,
+.next-empty {
+  background: linear-gradient(145deg, rgba(39,40,36,0.74), rgba(17,20,20,0.86));
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 22px 48px rgba(0,0,0,0.28);
+  backdrop-filter: blur(24px) saturate(105%);
+  -webkit-backdrop-filter: blur(24px) saturate(105%);
+}
+.flow-card { border-radius: 24px; padding: 22px 20px 24px; }
+.flow-title,
+.section-label {
+  color: #85897D;
+  font-size: 10px;
+  letter-spacing: 2.2px;
+}
+.flow-steps { min-height: 112px; }
+.step-circle {
+  width: 48px;
+  height: 48px;
+  color: #A9AAA0;
+  background: radial-gradient(circle at 35% 28%, rgba(255,255,255,0.10), rgba(25,28,27,0.82) 58%);
+  border: 1px solid rgba(218,216,201,0.16);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.08), 0 12px 24px rgba(0,0,0,0.28);
+}
+.step-circle svg { width: 19px; height: 19px; }
+.flow-step.active .step-circle {
+  color: #EEF0D8;
+  background: radial-gradient(circle at 35% 28%, #B5BF7B, #6E7849 74%);
+  border-color: rgba(208,218,148,0.64);
+  box-shadow: 0 0 0 5px rgba(154,165,106,0.08), 0 0 24px rgba(154,165,106,0.36);
+}
+.flow-step.done .step-circle {
+  color: #C9D095;
+  background: rgba(48,53,40,0.86);
+  border-color: rgba(154,165,106,0.62);
+}
+.flow-step.done .step-circle::after { background: #87915C; color: #101311; }
+.step-num { color: #B7B6AD; font-size: 12px; }
+.step-val { color: #AEB879; }
+.flow-arrow { color: rgba(207,205,191,0.18); font-size: 22px; }
+
+.summary-row { gap: 10px; }
+.summary-stat { min-height: 104px; display: flex; flex-direction: column; justify-content: center; }
+.stat-num { color: var(--text-main); font-size: 32px; text-shadow: 0 0 22px rgba(154,165,106,0.12); }
+.stat-label { color: var(--text-soft); }
+.next-task-card { border-left-width: 1px; border-radius: 18px; padding: 16px; }
+.next-task-card[data-priority="high"] { border-color: rgba(160,122,112,0.40); }
+.next-task-card[data-priority="medium"] { border-color: rgba(154,165,106,0.40); }
+.next-task-card[data-priority="low"] { border-color: rgba(116,130,145,0.38); }
+.next-task-title { color: var(--text-main); }
+.next-task-dur { color: #AEB0A5; background: rgba(255,255,255,0.055); border: 1px solid rgba(255,255,255,0.04); }
+.btn-focus-now {
+  color: #151812;
+  background: linear-gradient(135deg, #AEB878, #7C8656);
+  border: 1px solid rgba(223,228,175,0.24);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.24), 0 8px 20px rgba(108,119,69,0.28);
+}
+.btn-focus-now:active { background: #727C4D; }
+.next-empty { color: var(--text-soft); }
+.next-empty a { color: #B4BD7C; }
+
+.bottom-nav {
+  background: rgba(14,18,19,0.88);
+  border-color: rgba(218,216,201,0.12);
+  box-shadow: 0 -16px 42px rgba(0,0,0,0.28);
+}
+.nav-item { color: #666C69; }
+.nav-item.active { color: #B0B979; }
+
+@media (hover: hover) {
+  .flow-step:hover .step-circle { transform: translateY(-2px); border-color: rgba(188,194,139,0.42); }
+  .next-task-card { transition: transform 0.22s ease, border-color 0.22s ease; }
+  .next-task-card:hover { transform: translateY(-2px); border-color: rgba(188,194,139,0.32); }
+}
+
+@media (min-width: 900px) {
+  body {
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(310px, 0.88fr);
+    grid-template-areas:
+      "header header"
+      "flow summary"
+      "cards cards";
+    align-content: start;
+    gap: 20px;
+    padding: 0 30px 48px;
+    background-position: center;
+  }
+  .header { grid-area: header; padding: 48px 2px 0; margin-bottom: 2px; }
+  .flow-wrap { grid-area: flow; padding: 0; margin: 0; }
+  .summary-wrap { grid-area: summary; padding: 0; margin: 0; display: flex; flex-direction: column; }
+  .cards-wrap { grid-area: cards; padding: 0; margin-top: 0 !important; }
+  .flow-card { height: 100%; }
+  .summary-row { flex: 1; }
+  #nextUpWrap { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px !important; }
+}
+
+@media (max-width: 520px) {
+  body { background-position: 31% center; }
+  .header { padding-left: 20px; padding-right: 20px; }
+  .flow-wrap, .cards-wrap, .summary-wrap { padding-left: 16px; padding-right: 16px; }
+  .flow-card { padding-left: 12px; padding-right: 12px; }
+  .summary-stat { padding: 14px 8px; }
+  .stat-num { font-size: 28px; }
+}
 </style>
 </head>
 <body>
@@ -606,7 +869,7 @@ a:focus-visible {
   <div class="header-title" id="headerTitle">今天，<br>从计划开始</div>
   <div class="header-sub" id="headerDate"></div>
   <div class="streak-badge" id="streakBadge">
-    <span>🌿</span>
+    <span class="streak-orb" aria-hidden="true"></span>
     <span id="streakText">连续打卡 0 天</span>
   </div>
 </div>
@@ -617,19 +880,19 @@ a:focus-visible {
     <div class="flow-title">TODAY'S FLOW</div>
     <div class="flow-steps">
       <a class="flow-step" id="step1" href="#" onclick='event.preventDefault();window.parent.postMessage({nav:"schedule"},"*");'>
-        <div class="step-circle">📋</div>
+        <div class="step-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
         <div class="step-num">制定任务</div>
         <div class="step-val" id="step1Val"></div>
       </a>
       <div class="flow-arrow">›</div>
       <a class="flow-step" id="step2" href="#" onclick='event.preventDefault();window.parent.postMessage({nav:"pomodoro"},"*");'>
-        <div class="step-circle">🍅</div>
+        <div class="step-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2M9 2h6"/></svg></div>
         <div class="step-num">专注执行</div>
         <div class="step-val" id="step2Val"></div>
       </a>
       <div class="flow-arrow">›</div>
       <a class="flow-step" id="step3" href="#" onclick='event.preventDefault();window.parent.postMessage({nav:"checkin"},"*");'>
-        <div class="step-circle">📊</div>
+        <div class="step-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div>
         <div class="step-num">打卡复盘</div>
         <div class="step-val" id="step3Val"></div>
       </a>
@@ -2808,7 +3071,7 @@ render();
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="苔藓钟">
-<meta name="theme-color" content="#E5E8DE">
+<meta name="theme-color" content="#090D10">
 <title>苔藓钟 · 番茄专注</title>
 <style>
 :root {
@@ -3198,7 +3461,12 @@ circle.progress {
   padding: 6px 14px;
   z-index: 10;
 }
-.stats-icon { font-size: 14px; }
+.stats-icon {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--ring-fg);
+  box-shadow: 0 0 10px rgba(154,165,106,.62);
+}
 .stats-text { font-size: 13px; color: var(--text-mid); font-weight: 500; }
 
 button:focus-visible,
@@ -3206,6 +3474,165 @@ input:focus-visible,
 a:focus-visible {
   outline: 3px solid rgba(107,125,90,0.55);
   outline-offset: 3px;
+}
+
+/* ── MOSS NIGHT · 仪表盘专注体验 ── */
+:root {
+  --bg: #090D10;
+  --bg-card: rgba(30,33,31,0.82);
+  --ring-bg: rgba(221,217,202,0.72);
+  --ring-fg: #9AA56A;
+  --ring-fg2: #737E50;
+  --text-main: #E4E1D7;
+  --text-mid: #C6C3BA;
+  --text-soft: #90948B;
+  --text-mute: #676C68;
+  --dot-off: rgba(216,213,200,0.18);
+  --dot-on: #A7B171;
+  --btn-bg: #252925;
+  --break-ring: #77899A;
+  --break-bg: rgba(23,31,35,0.32);
+  --panel-bg: rgba(18,22,22,0.92);
+  color-scheme: dark;
+}
+html { background: #090D10; }
+html, body {
+  background-color: #090D10;
+  background-image:
+    linear-gradient(180deg, rgba(6,9,11,0.46), rgba(6,9,11,0.76)),
+    radial-gradient(circle at 62% 40%, rgba(154,165,106,0.075), transparent 34%),
+    url("assets/moss-night-bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, transparent 8%, rgba(4,7,8,0.34) 76%);
+}
+.app { background: transparent; }
+.app.break-mode { background: linear-gradient(180deg, rgba(24,35,40,0.18), rgba(12,18,21,0.40)); }
+
+.mode-tabs {
+  padding: 5px;
+  margin-bottom: 52px;
+  background: rgba(26,30,29,0.76);
+  border: 1px solid rgba(220,217,203,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 16px 34px rgba(0,0,0,0.24);
+}
+.mode-tab { color: #747A75; }
+.mode-tab.active {
+  color: #E1E2C7;
+  background: linear-gradient(135deg, rgba(150,161,99,0.34), rgba(91,101,63,0.30));
+  box-shadow: inset 0 1px 0 rgba(229,235,190,0.10), 0 0 18px rgba(142,153,91,0.12);
+}
+
+.ring-area {
+  width: min(72vw, 320px);
+  height: min(72vw, 320px);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(255,255,255,0.075), transparent 24%),
+    radial-gradient(circle, rgba(31,34,32,0.94) 0 56%, rgba(16,20,20,0.94) 57% 100%);
+  border: 1px solid rgba(220,217,203,0.14);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.07),
+    inset 0 -20px 44px rgba(0,0,0,0.42),
+    0 30px 80px rgba(0,0,0,0.46),
+    0 0 0 12px rgba(10,13,14,0.34);
+}
+.ring-area::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -1deg, rgba(210,207,193,0.32) 0 0.65deg, transparent 0.65deg 5deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 69%, #000 69.5% 72%, transparent 72.5%);
+  mask: radial-gradient(circle, transparent 0 69%, #000 69.5% 72%, transparent 72.5%);
+  opacity: 0.52;
+  pointer-events: none;
+}
+.ring-area::after {
+  content: '';
+  position: absolute;
+  inset: 35%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #4D514B, #171B1A 58%, #090C0D 100%);
+  border: 1px solid rgba(221,217,203,0.14);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.12), 0 12px 26px rgba(0,0,0,0.50);
+  opacity: 0.42;
+  pointer-events: none;
+}
+.ring-svg { position: relative; z-index: 1; padding: 12px; }
+circle.track { stroke-width: 8; opacity: 0.76; }
+circle.progress { stroke-width: 8; filter: drop-shadow(0 0 8px rgba(154,165,106,0.52)); }
+.ring-inner { z-index: 2; }
+.mode-label { color: #9A9C91; font-size: 10px; letter-spacing: 3.4px; }
+.time-display {
+  color: #E6E3D9;
+  font-size: clamp(42px, 12vw, 64px);
+  font-weight: 300;
+  text-shadow: 0 0 28px rgba(226,226,206,0.10), 0 10px 28px rgba(0,0,0,0.46);
+}
+.tap-hint { color: #70766F; }
+.dot { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10); }
+.dot.filled { box-shadow: 0 0 12px rgba(167,177,113,0.58); }
+
+.btn-main {
+  width: 68px;
+  height: 68px;
+  background: radial-gradient(circle at 36% 30%, #4C514A, #1B201E 62%, #0D1011);
+  border: 1px solid rgba(219,216,202,0.16);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.10), 0 10px 26px rgba(0,0,0,0.44), 0 0 0 6px rgba(154,165,106,0.07);
+}
+.btn-main:active { box-shadow: inset 0 2px 8px rgba(0,0,0,0.52), 0 4px 12px rgba(0,0,0,0.40); }
+.app.break-mode .btn-main { background: radial-gradient(circle at 36% 30%, #53616A, #202A2E 62%, #0D1113); }
+.btn-icon { fill: #DADFBB; width: 20px; height: 20px; }
+.btn-ghost {
+  color: #8D9189;
+  background: rgba(25,29,28,0.60);
+  border: 1px solid rgba(220,217,203,0.10);
+}
+.btn-ghost:active { background: rgba(154,165,106,0.14); color: #C8CD9C; }
+.task-area { max-width: 360px; }
+.task-input {
+  color: var(--text-mid);
+  background: rgba(18,22,21,0.68);
+  border: 1px solid rgba(220,217,203,0.12);
+  border-radius: 15px;
+  padding: 12px 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.task-input:focus { border-color: rgba(167,177,113,0.52); box-shadow: 0 0 0 4px rgba(154,165,106,0.08); }
+
+.stats-bar,
+.settings-btn {
+  color: var(--text-soft);
+  background: rgba(24,28,27,0.76);
+  border: 1px solid rgba(220,217,203,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 12px 28px rgba(0,0,0,0.26);
+}
+.stats-text { color: #B4B5AC; }
+.settings-btn:active { background: rgba(51,57,45,0.82); }
+.panel-overlay { background: rgba(2,4,5,0.64); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.settings-panel {
+  color: var(--text-main);
+  background: rgba(16,20,20,0.94);
+  border: 1px solid rgba(220,217,203,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 -30px 70px rgba(0,0,0,0.44);
+}
+.setting-row { border-color: rgba(220,217,203,0.10); }
+.step-btn { color: #BEC1B4; background: rgba(255,255,255,0.025); border-color: rgba(220,217,203,0.16); }
+.toast { color: #E5E2D8; background: rgba(17,20,20,0.92); border: 1px solid rgba(220,217,203,0.12); }
+
+@media (min-width: 900px) {
+  .app { padding-bottom: 24px; }
+  .mode-tabs { margin-bottom: 48px; }
+  .ring-area { width: 340px; height: 340px; }
+  .task-area { margin-top: 28px; }
 }
 
 /* 紧凑高度（小屏横向、浏览器地址栏展开时）优先保证操作区不重叠。 */
@@ -3233,7 +3660,7 @@ a:focus-visible {
 <body>
 
 <div class="stats-bar" id="statsBar">
-  <span class="stats-icon">🍃</span>
+  <span class="stats-icon" aria-hidden="true"></span>
   <span class="stats-text" id="statsText">今日 0 个</span>
 </div>
 
@@ -3849,9 +4276,10 @@ function closeMarkDone() {
   if (modal) modal.style.display = 'none';
 }
 
-// 点空白（overlay 区域）关闭弹窗，不响应 sheet 内部的点击
-document.getElementById('markDoneModal').addEventListener('click', e => {
-  if (e.target.id === 'markDoneModal') closeMarkDone();
+// 点空白（overlay 区域）关闭弹窗，不响应 sheet 内部的点击。
+// 使用事件代理，兼容单文件打包时弹窗节点位于脚本之后的结构。
+document.addEventListener('click', e => {
+  if (e.target && e.target.id === 'markDoneModal') closeMarkDone();
 });
 function showToastPomo(msg) {
   const t = document.getElementById('pomToast');
@@ -3874,14 +4302,23 @@ init();
 #linkedTaskBanner {
   display: none;
   position: fixed; top: 0; left: 0; right: 0;
-  background: rgba(238,240,232,0.96);
+  color: var(--text-main);
+  background: rgba(16,20,20,0.92);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(197,205,184,0.55);
+  border-bottom: 1px solid rgba(220,217,203,0.13);
   padding: calc(10px + env(safe-area-inset-top, 0px)) 20px 10px;
   align-items: center; gap: 10px;
   z-index: 80;
 }
-.linked-icon { font-size: 16px; }
+.linked-icon {
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #D6DCAC;
+  font: 600 10px/1 "Songti SC", "STSong", serif;
+  background: radial-gradient(circle at 35% 30%, #AEB878, #4F5937 72%);
+  box-shadow: 0 0 14px rgba(154,165,106,0.23);
+}
 .linked-body { flex: 1; min-width: 0; }
 .linked-name { font-size: 13px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .linked-dur  { font-size: 11px; color: var(--text-soft); }
@@ -3890,7 +4327,8 @@ init();
 #markDoneModal {
   display: none;
   position: fixed; inset: 0;
-  background: rgba(42,48,32,0.3);
+  background: rgba(2,4,5,0.68);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   z-index: 200;
   align-items: flex-end; justify-content: center;
   cursor: pointer;
@@ -3901,16 +4339,29 @@ init();
   border-radius: 28px 28px 0 0;
   padding: 20px 28px calc(24px + env(safe-area-inset-bottom, 0px));
   width: 100%;
+  max-width: 520px;
   text-align: center;
+  border: 1px solid rgba(220,217,203,0.13);
+  border-bottom: 0;
+  box-shadow: 0 -28px 80px rgba(0,0,0,0.45);
 }
-.mark-done-emoji { font-size: 40px; margin-bottom: 10px; }
+.mark-done-emoji {
+  width: 48px; height: 48px;
+  margin: 0 auto 12px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #E0E3C6;
+  font: 600 17px/1 "Songti SC", "STSong", serif;
+  background: radial-gradient(circle at 35% 30%, #AEB878, #4F5937 72%);
+  box-shadow: 0 0 0 1px rgba(218,224,174,.16), 0 10px 24px rgba(0,0,0,.34);
+}
 .mark-done-q { font-size: 16px; font-weight: 500; color: var(--text-main); margin-bottom: 4px; }
 .mark-done-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 24px; }
 .mark-done-title { color: var(--ring-fg); font-weight: 600; }
 .mark-done-btns { display: flex; gap: 12px; }
 .btn-md-yes {
   flex: 1; padding: 13px;
-  background: var(--ring-fg); color: #fff;
+  background: linear-gradient(135deg, #9BA66C, #6E784D); color: #11150F;
   border: none; border-radius: 14px;
   font-size: 15px; font-weight: 500; cursor: pointer;
   transition: background 0.15s;
@@ -3918,14 +4369,15 @@ init();
 .btn-md-yes:active { background: var(--ring-fg2); }
 .btn-md-no {
   flex: 1; padding: 13px;
-  background: var(--bg-card); color: var(--text-mid);
-  border: none; border-radius: 14px;
+  background: rgba(255,255,255,0.035); color: var(--text-mid);
+  border: 1px solid rgba(220,217,203,0.12); border-radius: 14px;
   font-size: 15px; cursor: pointer;
 }
 #pomToast {
   position: fixed; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); left: 50%;
   transform: translateX(-50%) translateY(10px);
-  background: var(--text-main); color: #fff;
+  background: rgba(18,22,21,0.94); color: #E6E3D9;
+  border: 1px solid rgba(220,217,203,0.12);
   padding: 10px 20px; border-radius: 20px;
   font-size: 13px; opacity: 0; pointer-events: none;
   z-index: 300; white-space: nowrap;
@@ -3935,7 +4387,7 @@ init();
 </style>
 
 <div id="linkedTaskBanner">
-  <span class="linked-icon">📋</span>
+  <span class="linked-icon" aria-hidden="true">苔</span>
   <div class="linked-body">
     <div class="linked-name" id="linkedTaskName"></div>
     <div class="linked-dur">专注时长 <span id="linkedTaskDur"></span></div>
@@ -3945,7 +4397,7 @@ init();
 
 <div id="markDoneModal">
   <div class="mark-done-sheet">
-    <div class="mark-done-emoji">🌿</div>
+    <div class="mark-done-emoji" aria-hidden="true">苔</div>
     <div class="mark-done-q">专注完成！</div>
     <div class="mark-done-sub">把 <span class="mark-done-title" id="markDoneTitle"></span> 标为完成？</div>
     <div class="mark-done-btns">
@@ -3961,9 +4413,9 @@ init();
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
   height: calc(64px + env(safe-area-inset-bottom, 0px));
-  background: rgba(247,248,243,0.92);
+  background: rgba(14,18,19,0.90);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(197,205,184,0.55);
+  border-top: 1px solid rgba(220,217,203,0.12);
   display: flex; align-items: center; justify-content: space-around;
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom, 0);
@@ -3976,7 +4428,7 @@ init();
   transition: color 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-.nav-item.active { color: var(--ring-fg); }
+.nav-item.active { color: #B0B979; }
 .nav-item svg { width: 22px; height: 22px; }
 .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
 </style>
