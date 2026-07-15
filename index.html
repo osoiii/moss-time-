@@ -17,7 +17,11 @@
 
 <title>苔藓时光 · 时间管理</title>
 <style>
-:root { color-scheme: dark; }
+:root {
+  color-scheme: dark;
+  --font-sans: "Avenir Next", "SF Pro Text", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-display: "SF Pro Display", "Avenir Next", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body {
   height: 100%;
@@ -27,7 +31,10 @@ html, body {
     url("assets/moss-night-bg.jpg") center / cover fixed,
     #090D10;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
 }
 .frame-wrap {
   position: fixed;
@@ -69,9 +76,11 @@ iframe.leaving {
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
   height: calc(64px + env(safe-area-inset-bottom, 0));
-  background: rgba(16, 20, 21, 0.88);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(229, 227, 213, 0.14);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.085), transparent 42%),
+    rgba(16, 21, 20, 0.68);
+  backdrop-filter: blur(30px) saturate(138%); -webkit-backdrop-filter: blur(30px) saturate(138%);
+  border-top: 1px solid rgba(235, 234, 217, 0.18);
   display: flex; align-items: center; justify-content: space-around;
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom, 0);
@@ -101,7 +110,7 @@ iframe.leaving {
   100% { transform: scale(1); }
 }
 .nav-item svg { width: 22px; height: 22px; }
-.nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+.nav-label { font-size: 10px; font-weight: 620; letter-spacing: 0.55px; }
 
 /* 桌面端改为悬浮侧边导航，内容获得真正的仪表盘宽度。 */
 @media (min-width: 900px) {
@@ -111,10 +120,10 @@ iframe.leaving {
     left: max(122px, calc(50% - 502px));
     right: auto;
     width: min(calc(100vw - 146px), 1102px);
-    border: 1px solid rgba(229, 227, 213, 0.12);
+    border: 1px solid rgba(235, 234, 217, 0.17);
     border-radius: 28px;
     overflow: hidden;
-    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.46);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.045), 0 30px 100px rgba(0, 0, 0, 0.46);
   }
   .bottom-nav {
     top: 24px;
@@ -127,7 +136,12 @@ iframe.leaving {
     justify-content: center;
     gap: 10px;
     padding: 70px 10px 18px;
-    border: 1px solid rgba(229, 227, 213, 0.13);
+    background:
+      linear-gradient(155deg, rgba(255,255,255,0.085), transparent 34%),
+      rgba(15, 20, 19, 0.63);
+    backdrop-filter: blur(32px) saturate(142%);
+    -webkit-backdrop-filter: blur(32px) saturate(142%);
+    border: 1px solid rgba(235, 234, 217, 0.18);
     border-radius: 26px;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
   }
@@ -143,9 +157,9 @@ iframe.leaving {
     place-items: center;
     transform: translateX(-50%);
     color: #D9DCB9;
-    font: 600 15px/1 "Songti SC", "STSong", serif;
+    font: 700 14px/1 var(--font-display);
     background: radial-gradient(circle at 34% 28%, #B6BF80, #5F6841 58%, #22281D 100%);
-    box-shadow: 0 0 0 1px rgba(226, 226, 201, 0.22), 0 8px 24px rgba(129, 143, 81, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 1px rgba(226, 226, 201, 0.22), 0 8px 24px rgba(129, 143, 81, 0.28);
   }
   .nav-item {
     flex: none;
@@ -160,7 +174,7 @@ iframe.leaving {
     box-shadow: inset 0 0 0 1px rgba(185, 194, 128, 0.1);
   }
   .nav-item svg { width: 23px; height: 23px; }
-  .nav-label { font-size: 11px; }
+  .nav-label { font-size: 10.5px; letter-spacing: 0.7px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -181,7 +195,7 @@ iframe.leaving {
   border-radius: 50%;
   display: grid; place-items: center;
   color: #D9DCB9;
-  font: 600 17px/1 "Songti SC", "STSong", serif;
+  font: 700 16px/1 var(--font-display);
   background: radial-gradient(circle at 34% 28%, #B6BF80, #5F6841 58%, #22281D 100%);
   box-shadow: 0 0 0 1px rgba(226,226,201,.2), 0 0 38px rgba(141,154,91,.2);
   animation: float 2s ease-in-out infinite;
@@ -220,7 +234,7 @@ iframe.leaving {
   display: grid; place-items: center;
   border-radius: 50%;
   color: #DDE2BA;
-  font: 600 12px/1 "Songti SC", "STSong", serif;
+  font: 700 11px/1 var(--font-display);
   background: radial-gradient(circle at 34% 28%, #AEB878, #515B39 72%);
   box-shadow: 0 0 14px rgba(154,165,106,.2);
 }
@@ -598,7 +612,7 @@ body { overflow-y: auto; overflow-x: hidden; padding-bottom: calc(96px + env(saf
   font-size: 28px;
   font-weight: 300;
   color: var(--text-main);
-  font-family: Georgia, serif;
+  font-family: var(--font-display, "Helvetica Neue", "PingFang SC", sans-serif);
   line-height: 1;
   margin-bottom: 4px;
   font-variant-numeric: tabular-nums;
@@ -860,6 +874,214 @@ body > * { position: relative; z-index: 1; }
   .summary-stat { padding: 14px 8px; }
   .stat-num { font-size: 28px; }
 }
+
+/* ── MOSS NIGHT · 排版与玻璃精修 ── */
+:root {
+  --font-sans: "Avenir Next", "SF Pro Text", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-display: "SF Pro Display", "Avenir Next", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+  --glass-fill: rgba(27, 32, 30, 0.50);
+  --glass-border: rgba(235, 235, 217, 0.19);
+  --glass-shine: rgba(255, 255, 255, 0.11);
+}
+html, body {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+button, input, textarea, select { font: inherit; }
+body {
+  background-image:
+    linear-gradient(180deg, rgba(5, 8, 10, 0.24), rgba(5, 8, 10, 0.66)),
+    radial-gradient(circle at 70% 18%, rgba(162, 171, 111, 0.10), transparent 34%),
+    url("assets/moss-night-bg.jpg");
+}
+body::before {
+  background:
+    linear-gradient(90deg, rgba(4,7,8,0.08), transparent 45%, rgba(4,7,8,0.16)),
+    radial-gradient(circle at 50% 38%, transparent 12%, rgba(4,7,8,0.25) 100%);
+}
+body::after {
+  content: '';
+  position: fixed;
+  z-index: 0;
+  top: 20%;
+  left: 38%;
+  width: min(56vw, 620px);
+  height: min(44vw, 440px);
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 32% 38%, rgba(166, 177, 107, 0.13), transparent 44%),
+    radial-gradient(circle at 74% 62%, rgba(95, 119, 132, 0.10), transparent 38%);
+  filter: blur(34px);
+}
+
+.header { margin-bottom: 34px; }
+.greeting {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.1px;
+  text-transform: uppercase;
+}
+.header-title {
+  margin-top: 13px;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 8.8vw, 52px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -2.6px;
+  text-wrap: balance;
+}
+.header-sub {
+  margin-top: 13px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.55px;
+}
+.streak-badge {
+  margin-top: 18px;
+  padding: 8px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.09), transparent 44%),
+    rgba(28, 33, 31, 0.48);
+  border-color: var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-shine), 0 14px 34px rgba(0,0,0,0.25);
+  backdrop-filter: blur(24px) saturate(135%);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+}
+
+.flow-card,
+.summary-stat,
+.next-task-card,
+.next-empty {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.095), rgba(255,255,255,0.018) 42%, rgba(3,7,8,0.24) 100%),
+    var(--glass-fill);
+  border-color: var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-shine),
+    inset 1px 0 0 rgba(255,255,255,0.035),
+    inset 0 -1px 0 rgba(0,0,0,0.20),
+    0 22px 54px rgba(0,0,0,0.30);
+  backdrop-filter: blur(30px) saturate(138%) brightness(1.04);
+  -webkit-backdrop-filter: blur(30px) saturate(138%) brightness(1.04);
+}
+.flow-card::before,
+.summary-stat::before,
+.next-task-card::before,
+.next-empty::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(118deg, rgba(255,255,255,0.10), transparent 22%, transparent 72%, rgba(157,169,103,0.055)),
+    radial-gradient(circle at 15% 0%, rgba(255,255,255,0.075), transparent 34%);
+}
+.flow-card { border-radius: 26px; padding: 26px 28px; }
+.flow-title,
+.section-label {
+  color: #9A9D91;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 2.5px;
+}
+.flow-steps { min-height: 126px; }
+.step-num {
+  color: #CDCCC3;
+  font-size: 12px;
+  font-weight: 560;
+  letter-spacing: 0.2px;
+}
+.step-val { font-size: 11px; font-weight: 650; }
+.flow-arrow { color: rgba(226,224,209,0.25); }
+
+.summary-row { gap: 12px; }
+.summary-stat {
+  min-width: 0;
+  min-height: 112px;
+  padding: 18px 12px;
+  border-radius: 21px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 560;
+  letter-spacing: -1.2px;
+}
+.stat-label { font-size: 11px; font-weight: 550; letter-spacing: 0.25px; }
+.cards-wrap { gap: 12px; }
+.next-task-card { border-radius: 20px; padding: 17px 18px; }
+.next-task-title { font-size: 14px; font-weight: 600; }
+.next-empty {
+  min-height: 84px;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  border-radius: 21px;
+  font-size: 13px;
+  font-weight: 520;
+}
+#nextUpWrap .next-empty { grid-column: 1 / -1; }
+.btn-focus-now { font-family: var(--font-sans); font-weight: 650; }
+
+@media (min-width: 900px) {
+  body {
+    grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.48fr);
+    grid-template-areas:
+      "header flow"
+      "header summary"
+      "cards cards";
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    gap: 18px 26px;
+    padding: 44px 42px 54px;
+    background-position: center;
+  }
+  .header {
+    grid-area: header;
+    align-self: stretch;
+    padding: 12px 0 0;
+    margin: 0;
+    border-right: 1px solid rgba(226,224,209,0.09);
+  }
+  .header::after {
+    content: '';
+    display: block;
+    width: 58px;
+    height: 1px;
+    margin-top: 30px;
+    background: linear-gradient(90deg, rgba(183,193,125,0.58), transparent);
+  }
+  .header-title { max-width: 280px; font-size: clamp(43px, 4vw, 56px); }
+  .flow-wrap { grid-area: flow; }
+  .flow-card { min-height: 204px; }
+  .summary-wrap { grid-area: summary; }
+  .summary-row { min-height: 118px; }
+  .cards-wrap { grid-area: cards; margin-top: 6px !important; }
+  #nextUpWrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  body { background-position: 27% center; }
+  .header { padding-top: calc(36px + env(safe-area-inset-top, 0px)); margin-bottom: 28px; }
+  .header-title { font-size: clamp(36px, 10.8vw, 44px); letter-spacing: -2.1px; }
+  .flow-wrap, .cards-wrap, .summary-wrap { padding-left: 15px; padding-right: 15px; }
+  .flow-card { padding: 21px 14px 22px; border-radius: 23px; }
+  .flow-steps { min-height: 118px; }
+  .summary-row { gap: 8px; }
+  .summary-stat { min-height: 102px; padding: 14px 6px; border-radius: 18px; }
+  .stat-num { font-size: 30px; }
+  .next-empty { min-height: 78px; border-radius: 19px; }
+}
 </style>
 </head>
 <body>
@@ -1078,12 +1300,18 @@ loadData();
   --tag-med:    #A8B0A0;
   --tag-low:    #B8C4D0;
   --done-text:  #A8B09A;
+  --font-sans: "Avenir Next", "SF Pro Text", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-display: "SF Pro Display", "Avenir Next", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", sans-serif;
   color-scheme: light;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button, input, textarea, select { font: inherit; }
 html, body {
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
   background: var(--bg);
   color: var(--text-main);
   -webkit-tap-highlight-color: transparent;
@@ -1352,7 +1580,7 @@ textarea#userInput:focus { border-color: var(--accent); }
   font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-display);
   font-style: italic;
 }
 .block-am .block-pill { background: var(--am-hd); color: var(--text-mid); }
@@ -3210,7 +3438,7 @@ circle.progress {
   letter-spacing: 2.5px;
   font-feature-settings: "tnum";
   line-height: 1;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-display, "Helvetica Neue", "PingFang SC", sans-serif);
   transition: color 0.8s;
   font-variant-numeric: tabular-nums;
 }
@@ -3655,6 +3883,97 @@ circle.progress { stroke-width: 8; filter: drop-shadow(0 0 8px rgba(154,165,106,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ── MOSS NIGHT · 字体与玻璃精修 ── */
+:root {
+  --font-sans: "Avenir Next", "SF Pro Text", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-display: "SF Pro Display", "Avenir Next", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+}
+html, body {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+button, input { font-family: inherit; }
+html, body {
+  background-image:
+    linear-gradient(180deg, rgba(4,7,9,0.34), rgba(4,7,9,0.69)),
+    radial-gradient(circle at 59% 42%, rgba(160,171,105,0.11), transparent 36%),
+    url("assets/moss-night-bg.jpg");
+}
+.mode-tabs {
+  padding: 6px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.10), transparent 46%),
+    rgba(26, 31, 29, 0.48);
+  border-color: rgba(234,233,216,0.19);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 1px 0 0 rgba(255,255,255,0.035),
+    0 18px 42px rgba(0,0,0,0.30);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+}
+.mode-tab {
+  font-size: 12px;
+  font-weight: 620;
+  letter-spacing: 0.55px;
+}
+.mode-tab.active {
+  background:
+    linear-gradient(135deg, rgba(190,201,128,0.30), rgba(87,99,62,0.26)),
+    rgba(51,57,45,0.42);
+  border: 1px solid rgba(209,217,158,0.11);
+  box-shadow: inset 0 1px 0 rgba(235,239,199,0.14), 0 8px 22px rgba(0,0,0,0.20);
+}
+.mode-label {
+  font-family: var(--font-sans);
+  font-weight: 650;
+  letter-spacing: 3.1px;
+}
+.time-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 3.8px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.tap-hint { font-weight: 520; letter-spacing: 0.8px; }
+.task-input {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.07), transparent 46%),
+    rgba(23, 28, 26, 0.48);
+  border-color: rgba(234,233,216,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 14px 34px rgba(0,0,0,0.22);
+  backdrop-filter: blur(26px) saturate(135%);
+  -webkit-backdrop-filter: blur(26px) saturate(135%);
+  font-size: 13px;
+  font-weight: 520;
+  letter-spacing: 0.2px;
+}
+.stats-bar,
+.settings-btn {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.095), transparent 50%),
+    rgba(24, 29, 27, 0.48);
+  border-color: rgba(234,233,216,0.19);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 16px 36px rgba(0,0,0,0.26);
+  backdrop-filter: blur(26px) saturate(138%);
+  -webkit-backdrop-filter: blur(26px) saturate(138%);
+}
+.stats-text { font-size: 12px; font-weight: 620; letter-spacing: 0.3px; }
+.settings-panel {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.07), transparent 36%),
+    rgba(16, 21, 20, 0.84);
+  border-color: rgba(234,233,216,0.18);
+  backdrop-filter: blur(34px) saturate(140%);
+  -webkit-backdrop-filter: blur(34px) saturate(140%);
+}
+.panel-title { font-family: var(--font-display); font-weight: 650; letter-spacing: -0.25px; }
+.setting-label { font-weight: 580; }
+.setting-sub { letter-spacing: 0.15px; }
+.step-val { font-family: var(--font-display); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -4315,7 +4634,7 @@ init();
   display: grid; place-items: center;
   border-radius: 50%;
   color: #D6DCAC;
-  font: 600 10px/1 "Songti SC", "STSong", serif;
+  font: 700 10px/1 var(--font-display);
   background: radial-gradient(circle at 35% 30%, #AEB878, #4F5937 72%);
   box-shadow: 0 0 14px rgba(154,165,106,0.23);
 }
@@ -4351,7 +4670,7 @@ init();
   display: grid; place-items: center;
   border-radius: 50%;
   color: #E0E3C6;
-  font: 600 17px/1 "Songti SC", "STSong", serif;
+  font: 700 16px/1 var(--font-display);
   background: radial-gradient(circle at 35% 30%, #AEB878, #4F5937 72%);
   box-shadow: 0 0 0 1px rgba(218,224,174,.16), 0 10px 24px rgba(0,0,0,.34);
 }
@@ -4461,14 +4780,20 @@ init();
   --text-soft: #7A8A68;
   --text-mute: #A8B09A;
   --border:    rgba(197,205,184,0.55);
+  --font-sans: "Avenir Next", "SF Pro Text", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-display: "SF Pro Display", "Avenir Next", "Helvetica Neue", "Noto Sans CJK SC", "PingFang SC", sans-serif;
   color-scheme: light;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button, input, textarea, select { font: inherit; }
 
 /* — 关键：自然流布局，不锁 html/body 高度 — */
 html { background: var(--bg); }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
   background: var(--bg);
   color: var(--text-main);
   -webkit-tap-highlight-color: transparent;
@@ -4522,7 +4847,7 @@ body {
 .stat-pill-num {
   font-size: 22px; font-weight: 300;
   color: var(--text-main);
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   line-height: 1;
   margin-bottom: 3px;
 }
@@ -4582,7 +4907,7 @@ textarea#noteInput:focus { border-color: var(--accent); }
 .streak-big {
   font-size: 44px; font-weight: 200;
   color: var(--text-main);
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   line-height: 1;
   min-width: 50px; text-align: center;
   font-variant-numeric: tabular-nums;
